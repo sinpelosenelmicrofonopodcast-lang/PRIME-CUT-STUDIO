@@ -10,7 +10,7 @@ export async function POST(request:Request){
   const id=String(form.get('id')||'');if(!/^[\da-f-]{36}$/i.test(id))return new Response('Invalid id',{status:400});
   const action=String(form.get('action')||'update');
   if(action==='regenerate'){
-    const token=regeneratePortalToken(id);if(!token)return new Response('Not found',{status:404});
+    const token=await regeneratePortalToken(id);if(!token)return new Response('Not found',{status:404});
     (await cookies()).set('primecuts_portal_flash',JSON.stringify({id,token}),{httpOnly:true,sameSite:'strict',secure:process.env.NODE_ENV==='production',path:'/admin',maxAge:300});
     return NextResponse.redirect(new URL('/admin#projects',request.url),303);
   }
@@ -18,7 +18,7 @@ export async function POST(request:Request){
   const amount=raw===''?null:Math.round(Number(raw)*100);
   const notes=String(form.get('notes')||'').trim();
   if(notes.length>3000 || (amount!==null && (!Number.isFinite(amount)||amount<0)))return new Response('Invalid amount or notes',{status:400});
-  const ok=updateProject(id,{status:String(form.get('status')||''),amount,notes});
+  const ok=await updateProject(id,{status:String(form.get('status')||''),amount,notes});
   if(!ok)return new Response('Invalid project data',{status:400});
   return NextResponse.redirect(new URL('/admin#projects',request.url),303);
 }

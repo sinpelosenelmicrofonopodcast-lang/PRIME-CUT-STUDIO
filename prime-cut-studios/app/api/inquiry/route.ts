@@ -14,7 +14,7 @@ export async function POST(request:Request){
     if(name.length<2||name.length>120||!/^\S+@\S+\.\S+$/.test(email)||email.length>254||phone.length>40||!services.some(s=>s.name===service)||details.length>3000||location.length>150||budget.length>50|| (date!==''&&!/^\d{4}-\d{2}-\d{2}$/.test(date)))
       return NextResponse.redirect(new URL('/book?error=validation',request.url),303);
     if(date && (Number.isNaN(Date.parse(date)) || date < new Date().toISOString().slice(0,10)))return NextResponse.redirect(new URL('/book?error=date',request.url),303);
-    const result=createInquiry({name,email,phone:phone||null,service,event_date:date||null,location:location||null,budget:budget||null,details:details||null},identifyIp(safeIp(request)));
+    const result=await createInquiry({name,email,phone:phone||null,service,event_date:date||null,location:location||null,budget:budget||null,details:details||null},identifyIp(safeIp(request)));
     if(!result.ok) return NextResponse.redirect(new URL('/book?error=limit',request.url),303);
     return NextResponse.redirect(new URL('/book?sent=1',request.url),303);
   }catch(error){console.error('Inquiry error',error);return NextResponse.redirect(new URL('/book?error=server',request.url),303);}
