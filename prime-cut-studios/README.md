@@ -13,7 +13,7 @@ Official Prime Cut Studios website and business operations code. **No deployment
 ## Deploy prerequisites — DO NOT TRIGGER AUTOMATIC DEPLOYMENTS
 1. Get your project's `sb_secret_*` API key from [Supabase BBHUB / API Keys](https://supabase.com/dashboard/project/mvrszgunjwvdqogtpyqm/settings/api-keys).
 2. In your Vercel project `prime-cut-studio`, set `SUPABASE_SECRET_KEY` as a **Sensitive** environment variable, for Production/Preview/Development (never paste the secret in chat or GitHub). `SUPABASE_URL` was already configured on Vercel.
-3. Set `ADMIN_EMAIL`, `ADMIN_PASSWORD_HASH`, `SESSION_SECRET` as server-only env vars.
+3. Set `ADMIN_EMAIL`, `ADMIN_PASSWORD_HASH`, `SESSION_SECRET` as server-only env vars. These were provisioned privately in Vercel during integration setup; rotate the temporary password before production use. To generate a new password hash locally, run `read -rsp "New admin password: " PW; echo; printf "%s" "$PW" | node scripts/generate-admin-hash.cjs; unset PW`.
 4. Verify Vercel Root Directory is `prime-cut-studios`; framework Next.js; install `npm install --no-audit --no-fund`; build `npm run build`.
 5. Ensure that other Vercel projects connected to the same repository are not accidentally deployed. Existing root app is BDG and is not the Prime Cut Studios website.
 6. Run install/build locally with network access and Node 24.x, then release only after checking the logs and core flows.
@@ -40,3 +40,7 @@ npm run dev
 See [IMPLEMENTATION_STATUS.md](IMPLEMENTATION_STATUS.md) and migration at `supabase/migrations/20261013030000_primecuts_persistent_storage.sql`.
 
 Legacy v0.1 conceptual schema is archived in `supabase/reference/` and is not applied automatically.
+
+## Safe GitHub integration branch
+
+This code is tracked in `primecuts-supabase-integration-v03` in the existing `PRIME-CUT-STUDIO` GitHub repository. Root and nested `vercel.json` files disable automatic deployments on the integration branch only. Production `main` remains unchanged pending approval.
