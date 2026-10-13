@@ -1,0 +1,26 @@
+{
+  "name": "primecuts-os",
+  "version": "0.2.0",
+  "private": true,
+  "engines": {"node": ">=24.15.0"},
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "generate-admin-hash": "node scripts/generate-admin-hash.cjs",
+    "test:db": "node scripts/test-db.cjs"
+  },
+  "dependencies": {
+    "next": "16.4.0",
+    "react": "19.2.6",
+    "react-dom": "19.2.6",
+    "lucide-react": "0.468.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.0.3",
+    "@types/react-dom": "^19.0.2",
+    "typescript": "^5.7.2"
+  }
+}
