@@ -10,3 +10,8 @@ data/
 *.sqlite-shm
 *.db
 .DS_Store
+
+*.tsbuildinfo
+
+# Client assets must remain in authenticated deployment/storage only.
+private/

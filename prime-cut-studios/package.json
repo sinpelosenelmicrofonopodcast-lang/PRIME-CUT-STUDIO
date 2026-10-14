@@ -1,24 +1,40 @@
 {
   "name": "primecuts-os",
-  "version": "0.2.0",
+  "version": "0.4.0",
   "private": true,
-  "engines": {"node": ">=24.15.0"},
+  "engines": {
+    "node": ">=24.15.0"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "generate-admin-hash": "node scripts/generate-admin-hash.cjs",
-    "test:db": "node scripts/test-db.cjs"
+    "test:db": "node scripts/check-integration.cjs",
+    "check:integration": "node scripts/check-integration.cjs",
+    "check:portal": "node scripts/check-client-portal.cjs",
+    "test:workspace:db": "node scripts/test-workspace-db.cjs",
+    "test:workspace:routes": "node scripts/test-workspace-routes.cjs",
+    "test:project-book:db": "node scripts/test-project-book-db.cjs",
+    "test:project-book:routes": "node scripts/test-project-book-routes.cjs",
+    "test:communications:db": "node scripts/test-communications-db.cjs",
+    "test:communications:routes": "node scripts/test-communications-routes.cjs",
+    "test:rest:responses": "node scripts/test-rest-responses.cjs"
   },
   "dependencies": {
+    "lucide-react": "0.468.0",
     "next": "16.4.0",
+    "nodemailer": "10.1.0",
     "react": "19.2.6",
     "react-dom": "19.2.6",
-    "lucide-react": "0.468.0"
+    "sharp": "0.35.5",
+    "svix": "2.8.0"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "0.5.9",
     "@types/node": "^24.0.0",
+    "@types/nodemailer": "8.0.2",
     "@types/react": "^19.0.3",
     "@types/react-dom": "^19.0.2",
     "typescript": "^5.7.2"

@@ -1,0 +1,20 @@
+#!/usr/bin/env node
+const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
+const root=path.resolve(__dirname,'..'),read=p=>fs.readFileSync(path.join(root,p),'utf8');
+const showcase=read('components/LiveLightroomShowcase.tsx');
+const home=read('app/page.tsx');
+const portfolio=read('app/portfolio/page.tsx');
+const stylesheet=read('app/globals.css');
+assert.ok(showcase.includes('/embed/shares/'),'must use official slideshow path rather than gallery page');
+assert.ok(!showcase.includes('frameUrl=source||(albumHost?albumUrl:null)'),'do not embed ordinary share page');
+assert.ok(!showcase.includes('prime-live-gallery-footnote'),'remove technical customer notices');
+assert.ok(!showcase.includes('Conectando la galería'),'remove connection chatter');
+assert.ok(!showcase.includes('Todas las fotos · Siempre la misma galería'),'remove technical captions');
+assert.ok(showcase.includes('Explorar nuestro trabajo'),'clear CTA');
+assert.ok(showcase.includes('Cotiza tu proyecto'),'production inquiry CTA');
+assert.ok(home.includes('LiveLightroomShowcase')&&portfolio.includes('LiveLightroomShowcase'));
+assert.ok(!home.includes('The story comes first.'),'remove duplicate portfolio promo');
+assert.ok(stylesheet.includes('.prime-photo-art'));
+assert.ok(stylesheet.includes('prefers-reduced-motion'));
+assert.ok(!/setInterval|setTimeout|fetch\(/.test(showcase),'must not poll or copy Lightroom images');
+console.log('PASS: clean image-first portfolio and lazy slideshow with customer-only copy');

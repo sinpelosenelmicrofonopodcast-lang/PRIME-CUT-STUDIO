@@ -1,0 +1,10 @@
+export const workspaceEnabled=()=>process.env.PRIMECUTS_WORKSPACE_V1==='true';
+export const consentVersion='2026-10-14-v1';
+export const stageStates=['pending','in_progress','waiting_client','blocked','completed','not_applicable'] as const;
+export type StageState=(typeof stageStates)[number];
+export const stageLabels:Record<StageState,string>={pending:'Pending',in_progress:'In progress',waiting_client:'Waiting for you',blocked:'Blocked',completed:'Completed',not_applicable:'Not applicable'};
+export const stageTemplate=[['Request received','Your project request'],['Consultation','Define the production'],['Proposal & scope','Review the agreed scope'],['Contract & reservation','Confirm the agreement'],['Planning','Plan dates and requirements'],['Preproduction','Prepare the shoot'],['Production','Photo session or filming'],['Media organization','Organize production material'],['Postproduction','Edit the production'],['Client review','Review the current version'],['Revisions','Make agreed adjustments'],['Final approval','Confirm the final version before delivery'],['Final delivery','Receive final deliverables'],['Closeout','Complete the project']] as const;
+export function uuid(value:string){return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value);}
+export function progress(stages:{status:StageState}[]){const included=stages.filter(s=>s.status!=='not_applicable');return included.length?Math.round(100*included.filter(s=>s.status==='completed').length/included.length):0;}
+export function safeProfessionalUrl(v:string){if(!v)return true;try{const u=new URL(v);return u.protocol==='https:'&&!u.username&&!u.password&&!u.port&&!/^(localhost|.*\.localhost|.*\.local|\[|\d+(?:\.\d+){0,3})$/i.test(u.hostname)}catch{return false;}}
+export function dateOnly(value:string){if(!value)return null;if(!/^\d{4}-\d{2}-\d{2}$/.test(value)||!Number.isFinite(Date.parse(value))||new Date(value).toISOString().slice(0,10)!==value)throw new Error('Invalid date');return value;}

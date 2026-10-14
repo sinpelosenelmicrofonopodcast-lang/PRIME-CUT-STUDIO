@@ -1,2 +1,8 @@
-import {SiteHeader} from '@/components/SiteHeader';import {Footer} from '@/components/Footer';import {services} from '@/lib/data';import Link from 'next/link';import {ArrowUpRight} from 'lucide-react';
-export default function Services(){return <><SiteHeader/><main><div className="shell pagehero"><div className="eyebrow">Our services</div><h1>Every project has<br/><em>its own story.</em></h1><p className="muted">Explore photography, video, brand content and custom productions. Build the right package around your goals, not a one-size-fits-all preset.</p></div><section style={{paddingTop:20}}><div className="shell grid">{services.map((s,i)=><article className="card service-card" key={s.slug}><div className="service-number">0{i+1}</div><div className="kicker">{s.kicker}</div><h3>{s.name}</h3><p className="muted">{s.description}</p><div className="service-bottom"><span className="price">{s.price}</span><Link className="btn secondary btn-small" href={`/book?service=${encodeURIComponent(s.name)}`}>Request quote <ArrowUpRight size={15}/></Link></div></article>)}</div><p className="small muted price-disclaimer">Starting prices are preliminary and exclude variable extras such as travel, additional crew, special rentals and taxes. Written quote controls.</p></section></main><Footer/></>}
+import {getPricingCatalog} from '@/lib/pricing-db';
+export const dynamic='force-dynamic';
+import {publicMetadata} from '@/lib/public-metadata';
+import {SiteHeader} from '@/components/SiteHeader';
+import {Footer} from '@/components/Footer';
+import {PricingCatalog} from '@/components/PricingCatalog';
+export const metadata=publicMetadata('Production Packages & Pricing | Paquetes y Precios','Prime Cut Studios pricing in Central Texas: music videos from $500, photography, events, commercial films, podcasts, reels and monthly production. Name Your Budget on every service.','/services');
+export default async function Services(){const categories=await getPricingCatalog();return <><SiteHeader/><main><PricingCatalog categories={categories}/></main><Footer/></>}

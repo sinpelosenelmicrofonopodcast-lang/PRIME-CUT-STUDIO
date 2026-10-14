@@ -1,0 +1,3 @@
+import {redirect,notFound} from 'next/navigation';import Link from 'next/link';import {notificationScope} from '@/lib/notifications';import {commEnabled} from '@/lib/communications-db';import {NotificationFeed} from '@/components/workspace/NotificationFeed';
+export const dynamic='force-dynamic';export const metadata={title:'Notifications | Prime Cut Studios',robots:{index:false,follow:false}};
+export default async function Notifications(){if(!commEnabled())notFound();const s=await notificationScope();if(!s)redirect('/client/login');return <main className="shell narrow pagehero"><Link href={s.team?'/team':'/client'}>← Portal</Link><h1>Notificaciones / Notifications</h1><section className="panel"><NotificationFeed/></section></main>;}

@@ -1,0 +1,146 @@
+{
+  "scope": "Next.js route HTTP -> local adapter -> real isolated PostgreSQL. Legacy fixture sessions. Storage is isolated bytes. No SMTP/Auth provider certification or browser visual certification.",
+  "results": [
+    {
+      "name": "owner and three existing fixture clients establish HTTP sessions",
+      "pass": true
+    },
+    {
+      "name": "admin HTTP creates a persisted project with complete timeline",
+      "pass": true
+    },
+    {
+      "name": "repeated HTTP project creation is idempotent",
+      "pass": true
+    },
+    {
+      "name": "assigned client and admin render persisted project; unrelated client denied",
+      "pass": true
+    },
+    {
+      "name": "production proposal persists through admin HTTP",
+      "pass": true
+    },
+    {
+      "name": "client decision HTTP persists once; duplicate does not duplicate decision",
+      "pass": true
+    },
+    {
+      "name": "viewer and unrelated client cannot approve production section",
+      "pass": true
+    },
+    {
+      "name": "stale revision rejected and previous proposal preserved",
+      "pass": true
+    },
+    {
+      "name": "client conversation HTTP persists once and round-trips through GET",
+      "pass": true
+    },
+    {
+      "name": "admin timeline HTTP updates stage and refuses stale revision",
+      "pass": true
+    },
+    {
+      "name": "profile HTTP saves and preserves independent marketing consent",
+      "pass": true
+    },
+    {
+      "name": "private PDF upload, authorized byte download, and outsider denial",
+      "pass": true
+    },
+    {
+      "name": "file signature mismatch rejected without storage orphan",
+      "pass": true
+    },
+    {
+      "name": "client cannot invoke admin project creation",
+      "pass": true
+    },
+    {
+      "name": "contact rejects impossible future calendar date before persistence",
+      "pass": true
+    },
+    {
+      "name": "Name Your Budget accepts $350.25 and persists original request snapshot and bilingual outbox",
+      "pass": true
+    },
+    {
+      "name": "retired real estate, invalid package and invalid budget cannot create leads",
+      "pass": true
+    },
+    {
+      "name": "admin pricing saves publicly scoped package and keeps cost separate; client and forged Gun N Run price rejected",
+      "pass": true
+    },
+    {
+      "name": "rental inquiry HTTP persists correct assets and acknowledgment outbox",
+      "pass": true
+    },
+    {
+      "name": "logout invalidates application cookie and private project access",
+      "pass": true
+    },
+    {
+      "name": "casting refuses impossible closing date before writing",
+      "pass": true
+    },
+    {
+      "name": "admin creates casting through HTTP with persisted project scope",
+      "pass": true
+    },
+    {
+      "name": "casting application without bank consent never enrolls talent",
+      "pass": true
+    },
+    {
+      "name": "duplicate casting application rejected without duplicate records",
+      "pass": true
+    },
+    {
+      "name": "voluntary bank enrollment preserves separate client material consent",
+      "pass": true
+    },
+    {
+      "name": "public talent join requires explicit voluntary bank permission",
+      "pass": true
+    },
+    {
+      "name": "admin tasks persist status; clients cannot change them",
+      "pass": true
+    },
+    {
+      "name": "multipart casting persists decoded private photos and voluntary talent profile atomically",
+      "pass": true
+    },
+    {
+      "name": "invalid casting photograph rejected without adding application or object",
+      "pass": true
+    },
+    {
+      "name": "staff can view private application photograph; anonymous and clients cannot",
+      "pass": true
+    },
+    {
+      "name": "assigned talent appears with inline photographs in client Elenco section",
+      "pass": true
+    },
+    {
+      "name": "revoked profile consent immediately hides talent and blocks its photo",
+      "pass": true
+    },
+    {
+      "name": "collaborator invitation remains on settings tab with visible private link",
+      "pass": true
+    },
+    {
+      "name": "client email correction requires explicit confirmation and preserves stale state",
+      "pass": true
+    },
+    {
+      "name": "confirmed correction changes this project, revokes old access, creates new invitation",
+      "pass": true
+    }
+  ],
+  "adapterErrors": []
+}

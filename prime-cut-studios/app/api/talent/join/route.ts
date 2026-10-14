@@ -1,0 +1,9 @@
+import {scheduleMail} from '@/lib/email';
+import {NextResponse} from 'next/server';import {workspaceForm} from '@/lib/workspace-request';import {safeProfessionalUrl} from '@/lib/workspace-policy';import {sameOriginRedirect,safeIp} from '@/lib/auth';import {identifyIp,normalizedEmail} from '@/lib/db';import {joinTalentBank} from '@/lib/workspace-db';
+export const runtime='nodejs';
+export async function POST(req:Request){const f=await workspaceForm(req);if(f instanceof Response)return f;
+ const name=(f.get('fullName')||'').trim(),email=normalizedEmail(f.get('email')||''),phone=(f.get('phone')||'').trim(),city=(f.get('city')||'').trim(),portfolio=(f.get('portfolioUrl')||'').trim(),headshot=(f.get('headshotUrl')||'').trim(),experience=(f.get('experience')||'').trim(),availability=(f.get('availability')||'').trim();
+ if(f.get('bank')!=='yes'||f.get('adult')!=='yes'||name.length<2||name.length>140||email.length>254||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)||phone.length>40||city.length>100||portfolio.length>500||headshot.length>500||experience.length>1800||availability.length>500||!safeProfessionalUrl(portfolio)||!safeProfessionalUrl(headshot))return new Response('Review your information and voluntary permissions',{status:400});
+ if(f.get('website'))return new Response('Invalid request',{status:400});
+ try{const token=await joinTalentBank({full_name:name,email,phone:phone||null,city:city||null,portfolio_url:portfolio||null,headshot_url:headshot||null,experience:experience||null,availability:availability||null,ip_hash:identifyIp(safeIp(req))},f.get('material')==='yes');scheduleMail();return NextResponse.redirect(sameOriginRedirect(req,'/talent/manage/'+token),303);}catch{return new Response('Unable to save right now. Wait before trying again or contact the studio.',{status:429});}
+}

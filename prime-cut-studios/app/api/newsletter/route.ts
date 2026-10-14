@@ -1,0 +1,11 @@
+import {NextResponse} from 'next/server';
+import {workspaceForm} from '@/lib/workspace-request';import {sameOriginRedirect,safeIp} from '@/lib/auth';
+import {hashToken,identifyIp} from '@/lib/db';import {rpc,allowAction,commEnabled,comm,filters} from '@/lib/communications-db';
+import {subscribeNewsletter} from '@/lib/newsletter';import {enqueueEmail} from '@/lib/email';
+export const runtime='nodejs';
+export async function POST(req:Request){if(!commEnabled())return new Response('Not available',{status:503});const f=await workspaceForm(req);if(f instanceof Response)return f;const action=f.get('action')||'',token=f.get('token')||'',language=f.get('language')==='es'?'es':'en';const go=(status:string)=>NextResponse.redirect(sameOriginRedirect(req,'/newsletter?status='+status),303);if(!await allowAction('newsletter:ip:'+identifyIp(safeIp(req)),10,3600))return go('rate');
+ if(action==='subscribe'){const email=(f.get('email')||'').trim().toLowerCase();if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)||email.length>254||f.get('consent')!=='yes')return go('invalid');if(!await allowAction('newsletter:email:'+hashToken(email),2,3600))return go('pending');await subscribeNewsletter(email,language);return go('pending');}
+ if(!/^[A-Za-z\d_-]{43}$/.test(token))return go('expired');
+ if(action==='confirm'){const manage=f.get('manage')||'';if(!/^[A-Za-z\d_-]{43}$/.test(manage))return go('expired');const result=await rpc<boolean>('pc_newsletter_confirm',{p_hash:hashToken(token),p_manage:hashToken(manage)});return result?NextResponse.redirect(sameOriginRedirect(req,'/newsletter/manage#action=unsubscribe&token='+manage),303):go('expired');}
+ if(action==='unsubscribe'||action==='language'){const result=await rpc<boolean>('pc_newsletter_manage',{p_hash:hashToken(token),p_action:action,p_language:language});if(result&&action==='unsubscribe'){const row=(await comm<{email:string;language:'es'|'en'}[]>(filters('pc_newsletter',{manage_hash:'eq.'+hashToken(token),select:'email,language',limit:'1'})))[0];if(row)await enqueueEmail('newsletter-unsub:'+hashToken(token),row.email,'newsletter_unsubscribed',row.language,'/newsletter');}return go(result?(action==='unsubscribe'?'unsubscribed':'preferences'):'expired');}
+ return go('invalid');}

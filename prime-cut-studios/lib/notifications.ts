@@ -1,0 +1,4 @@
+import 'server-only';import {operationsSession} from '@/lib/operations-db';import {clientAuthenticated} from '@/lib/client-auth';import {comm,filters} from '@/lib/communications-db';
+export async function notificationScope(){const staff=await operationsSession();if(staff?.legacyOwner)return {filter:{owner_only:'eq.true',account_id:'is.null'},team:true};const account=await clientAuthenticated();return account?{filter:{account_id:'eq.'+account.id,owner_only:'eq.false'},team:!!staff}:null;}
+export type Notification={id:string;title:string;link:string;created_at:string;read_at:string|null};
+export async function ownNotifications(){const s=await notificationScope();return s?comm<Notification[]>(filters('pc_notifications',{...s.filter,select:'id,title,link,created_at,read_at',order:'created_at.desc',limit:'100'})):[];}
