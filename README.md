@@ -1,25 +1,15 @@
-# Prime Cut Studios
+# Prime Cut Studios — code repository
 
-**Photography · Video Production · Creative Services — Central Texas**
+This repository has been cleaned of the unrelated legacy **BDG SaaS Platform** at the root and the superseded `primecuts-os/` prototype. Those files are preserved in Git history and the **archive/pre-primecuts-cleanup-2026-10-14** branch.
 
-This is the source repository for **Prime Cut Studios**. The Prime Cut Studios website and internal production-management platform are collectively known as **PrimeCuts OS**.
+## Retained source
+- `prime-cut-studios/` — historic Prime Cut Studios v0.2 Next.js app, kept as reference/fallback.
+- `.gitignore` — repository-level ignore rules.
 
-## Prime Cut Studios v0.2
+**Important:** The currently deployed Prime Cut Studios application on Vercel is newer than this GitHub snapshot; do not deploy the historic v0.2 directory as production or assume this GitHub repository is connected to the active Vercel deployment. Reconcile current live source and configurations before using this repository for automated releases.
 
-The current project has been imported intact into the **[prime-cut-studios/](prime-cut-studios/)** directory.
+Production site: https://www.primecutstudiostx.com
+Vercel project: `prime-cut-studios`
+Supabase project: `PRIME CUT STUDIO`
 
-- [Website and operations source](prime-cut-studios/)
-- [Project README and setup instructions](prime-cut-studios/README.md)
-- [Implementation status and remaining work](prime-cut-studios/IMPLEMENTATION_STATUS.md)
-
-The standalone Next.js project lives in `prime-cut-studios/`, not at the repository root. Run its development commands from that directory. **There has been no deployment, and Vercel is not part of the requested workflow.**
-
-## Existing root application (legacy)
-
-The repository already contained a different Next.js app, identified in its code as **BDG SaaS Platform**. That application is preserved unchanged at the repository root to prevent loss of existing work. Its original README is archived in [docs/legacy-bdg-README.md](docs/legacy-bdg-README.md).
-
-**Do not treat the root application as the Prime Cut Studios website.** Integrating or replacing it will require a separate reviewed change.
-
-## Before publishing
-
-Complete live service integrations, production authentication and database configuration, validate the full build and test the client-facing flows. Do not enable payment or rental workflows until configured and approved.
+This cleanup made **no production deployment** and did not modify customer data, storage, or authentication.

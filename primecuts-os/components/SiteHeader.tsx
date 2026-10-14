@@ -1,2 +1,0 @@
-import Link from 'next/link';
-export function SiteHeader(){return <header className="nav"><div className="shell navinner"><Link href="/" className="brand"><span className="brandmark">PRIME CUT</span><span className="brandsub">STUDIOS</span></Link><nav className="links"><Link href="/services">Services</Link><Link href="/rentals">Rentals</Link><Link href="/book">Book</Link><Link href="/client">Client Portal</Link><Link className="btn" href="/book">Reserva ya</Link></nav></div></header>}

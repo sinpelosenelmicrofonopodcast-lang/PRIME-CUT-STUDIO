@@ -1,1 +1,0 @@
-export function Footer(){return <footer className="footer"><div className="shell footergrid"><div className="brand"><span className="brandmark">PRIME CUT</span><span className="brandsub">STUDIOS</span></div><div>More than images. We create stories. · Central Texas</div></div></footer>}
