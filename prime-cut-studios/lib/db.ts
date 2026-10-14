@@ -1,3 +1,4 @@
+import type {ProductionPackage,Bilingual,Locale} from './pricing';
 import {restResponse} from '@/lib/rest-response';
 /** Prime Cut Studios — persistent Supabase database. Server-only: NEVER bundle the secret key in a client component. */
 import { randomUUID, randomBytes, createHash } from 'node:crypto';
@@ -46,7 +47,8 @@ async function patch(table:string,id:string,values:object,filters?:Record<string
   return rows.length===1;
 }
 
-export type Inquiry = { id: string; name: string; email: string; phone: string | null; service: string; event_date: string | null; location: string | null; budget: string | null; details: string | null; status: string; created_at: string };
+export type InquirySnapshot={language:Locale;mode:string;service:string;package:ProductionPackage|null;proposed_budget:number|null;notes:string;extras:Bilingual[]};
+export type Inquiry = { id: string; name: string; email: string; phone: string | null; service: string; event_date: string | null; location: string | null; budget: string | null; details: string | null; status: string; created_at: string;request_snapshot?:InquirySnapshot|null };
 export type Project = { id: string; inquiry_id: string | null; client_name: string; client_email: string; title: string; status: string; event_date: string | null; location: string | null; quote_amount_cents: number | null; quote_notes: string; portal_expires_at: string | null; created_at: string; updated_at: string };
 export type PortfolioEntry = {id:string;title:string;category:string;summary:string;image_filename:string;image_mime:string;video_url:string|null;consent_confirmed:boolean;published:boolean;created_at:string};
 export type Deliverable = { id: string; project_id: string; title: string; description: string; url: string | null; visible: boolean; provider?:'drive'|'lightroom'|'blackmagic'; created_at: string };
@@ -59,18 +61,28 @@ export function identifyIp(ip: string) {
   return createHash('sha256').update(salt+':'+ip).digest('hex');
 }
 
-export async function listInquiries():Promise<Inquiry[]> {return getRows('pc_inquiries',{select:'id,name,email,phone,service,event_date,location,budget,details,status,created_at',order:'created_at.desc',limit:'200'});}
+export async function listInquiries():Promise<Inquiry[]> {return getRows('pc_inquiries',{select:'id,name,email,phone,service,event_date,location,budget,details,status,created_at,request_snapshot',order:'created_at.desc',limit:'200'});}
 export async function listProjects():Promise<Project[]> {return getRows('pc_projects',{select:'id,inquiry_id,client_name,client_email,title,status,event_date,location,quote_amount_cents,quote_notes,portal_expires_at,created_at,updated_at',order:'updated_at.desc',limit:'200'});}
 export async function getProject(id:string):Promise<Project|undefined>{const x=await getRows<Project>('pc_projects',{id:`eq.${id}`,select:'*',limit:'1'});return x[0];}
 export async function listDeliverables(id:string,client=false):Promise<Deliverable[]> {return getRows('pc_deliverables',{project_id:`eq.${id}`,...(client?{visible:'eq.true'}:{}),select:'*',order:'created_at.desc'});}
 
-export async function createInquiry(data: Omit<Inquiry,'id'|'status'|'created_at'> & {request_id?:string;request_snapshot?:unknown}, ipHash:string){
-  if(data.request_id){const existing=await getRows<{id:string}>('pc_inquiries',{request_id:'eq.'+data.request_id,select:'id',limit:'1'});if(existing.length)return {ok:true,id:existing[0].id} as const;}
+export async function createInquiry(data: Omit<Inquiry,'id'|'status'|'created_at'> & {request_id?:string;request_snapshot?:InquirySnapshot}, ipHash:string){
+  const existingRequest=async()=>{
+    if(!data.request_id)return null;
+    const [saved]=await getRows<Inquiry>('pc_inquiries',{request_id:'eq.'+data.request_id,select:'id,name,email,phone,service,event_date,location,budget,details,request_snapshot',limit:'1'});
+    if(!saved)return null;
+    const fields=['name','email','phone','service','event_date','location','budget'] as const;
+    const matching=fields.every(key=>(saved[key]??null)===(data[key]??null));
+    const old=saved.request_snapshot,next=data.request_snapshot;
+    const sameContent=old&&next?old.notes===next.notes&&old.mode===next.mode&&old.language===next.language&&old.package?.id===next.package?.id&&JSON.stringify(old.extras)===JSON.stringify(next.extras):saved.details===data.details;
+    return matching&&sameContent?{ok:true,id:saved.id} as const:{ok:false,reason:'conflict'} as const;
+  };
+  const prior=await existingRequest();if(prior)return prior;
   const since = new Date(Date.now()-3600000).toISOString();
   const recent = await getRows<{id:string}>('pc_inquiries',{select:'id',ip_hash:`eq.${ipHash}`,created_at:`gte.${since}`,limit:'5'});
   if (recent.length>=5)return {ok:false,reason:'rate_limit'} as const;
   let row:{id:string};
-  try{row=await insert<{id:string}>('pc_inquiries',{...data,ip_hash:ipHash});}catch(error){if(data.request_id){const existing=await getRows<{id:string}>('pc_inquiries',{request_id:'eq.'+data.request_id,select:'id',limit:'1'});if(existing.length)return {ok:true,id:existing[0].id} as const;}throw error;}
+  try{row=await insert<{id:string}>('pc_inquiries',{...data,ip_hash:ipHash});}catch(error){const prior=await existingRequest();if(prior)return prior;throw error;}
   return {ok:true,id:row.id} as const;
 }
 export async function convertInquiry(id:string){

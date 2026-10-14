@@ -66,11 +66,23 @@
       "pass": true
     },
     {
+      "name": "reused quote id with different request data refuses misleading success",
+      "pass": true
+    },
+    {
       "name": "retired real estate, invalid package and invalid budget cannot create leads",
       "pass": true
     },
     {
       "name": "admin pricing saves publicly scoped package and keeps cost separate; client and forged Gun N Run price rejected",
+      "pass": true
+    },
+    {
+      "name": "pricing and private cost writes roll back together if a private write fails",
+      "pass": true
+    },
+    {
+      "name": "long configured package scope and maximum customer notes persist without false validation error",
       "pass": true
     },
     {
@@ -139,6 +151,14 @@
     },
     {
       "name": "confirmed correction changes this project, revokes old access, creates new invitation",
+      "pass": true
+    },
+    {
+      "name": "browser owner private project layout renders and fits desktop/mobile with isolated session",
+      "pass": true
+    },
+    {
+      "name": "browser authorized viewer private project layout renders and fits desktop/mobile with isolated session",
       "pass": true
     }
   ],

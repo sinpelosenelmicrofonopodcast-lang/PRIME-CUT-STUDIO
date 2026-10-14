@@ -20,7 +20,9 @@
     "test:project-book:routes": "node scripts/test-project-book-routes.cjs",
     "test:communications:db": "node scripts/test-communications-db.cjs",
     "test:communications:routes": "node scripts/test-communications-routes.cjs",
-    "test:rest:responses": "node scripts/test-rest-responses.cjs"
+    "test:rest:responses": "node scripts/test-rest-responses.cjs",
+    "test:pricing:browser": "node scripts/test-pricing-browser.cjs",
+    "test:journeys": "node scripts/test-full-http-sql.cjs"
   },
   "dependencies": {
     "lucide-react": "0.468.0",
@@ -37,6 +39,7 @@
     "@types/nodemailer": "8.0.2",
     "@types/react": "^19.0.3",
     "@types/react-dom": "^19.0.2",
+    "playwright": "1.62.1",
     "typescript": "^5.7.2"
   }
 }

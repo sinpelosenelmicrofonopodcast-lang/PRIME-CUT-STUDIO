@@ -1,7 +1,7 @@
 # Prime Cut pricing recovery candidate
 
-See RELEASE_STATUS_20261014.md for current validation and blockers.
+48 public packages; Gun N Run $500; Name Your Budget; bilingual quote journey and private pricing controls.
 
-48 public packages, 3 unpublished real-estate packages, Gun N Run $500, bilingual sales content, exact custom budgets, snapshots, duplicate protection and admin pricing.
+Validation: production build, TypeScript, 40 HTTP/PostgreSQL/browser private-portal checks and 6 public browser checks pass. Existing provider receipts confirmed in owner test inbox. Four candidate faults corrected in follow-up verification.
 
-TypeScript, production build and HTTP/PostgreSQL isolated journeys passed. NOT deployed. Browser visual and real-provider email validation remain blocked. The full ZIP contains private client assets; do not upload its private/ directory to a public repository.
+NOT deployed. Owner notice remains queued; complete provider and contract/invoice/deposit validation remain pending. See RELEASE_STATUS_20261014.md. Private client assets are included only in the full owned ZIP and must stay out of public Git.

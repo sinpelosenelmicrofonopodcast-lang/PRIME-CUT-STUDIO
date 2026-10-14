@@ -1,4 +1,26 @@
-{
-  "status": "BLOCKED",
-  "reason": "Chromium absent; download invalid. Remote browser cannot reach local server. No browser PASS results."
-}
+[
+  {
+    "name": "48 scoped package cards, Gun N Run $500, two actions per card and no Real Estate",
+    "status": "PASS"
+  },
+  {
+    "name": "Spanish package selection preserves language and selected package in quote form",
+    "status": "PASS"
+  },
+  {
+    "name": "exact custom budget below $500 is valid and request has an idempotency key",
+    "status": "PASS"
+  },
+  {
+    "name": "mobile package grid fits viewport and navigation retains Spanish",
+    "status": "PASS"
+  },
+  {
+    "name": "quote language toggle updates heading, footer and HTML language",
+    "status": "PASS"
+  },
+  {
+    "name": "no client-side application exceptions",
+    "status": "PASS"
+  }
+]
