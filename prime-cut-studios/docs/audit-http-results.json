@@ -1,0 +1,116 @@
+[
+  {
+    "path": "/",
+    "status": 200,
+    "location": null,
+    "bytes": 67434
+  },
+  {
+    "path": "/account",
+    "status": 200,
+    "location": null,
+    "bytes": 29268
+  },
+  {
+    "path": "/account/verify",
+    "status": 200,
+    "location": null,
+    "bytes": 19370
+  },
+  {
+    "path": "/client/login",
+    "status": 200,
+    "location": null,
+    "bytes": 26536
+  },
+  {
+    "path": "/book",
+    "status": 200,
+    "location": null,
+    "bytes": 60603
+  },
+  {
+    "path": "/rentals",
+    "status": 200,
+    "location": null,
+    "bytes": 22400
+  },
+  {
+    "path": "/services",
+    "status": 200,
+    "location": null,
+    "bytes": 134744
+  },
+  {
+    "path": "/casting",
+    "status": 200,
+    "location": null,
+    "bytes": 23187
+  },
+  {
+    "path": "/privacy",
+    "status": 200,
+    "location": null,
+    "bytes": 31138
+  },
+  {
+    "path": "/terms",
+    "status": 200,
+    "location": null,
+    "bytes": 25943
+  },
+  {
+    "path": "/robots.txt",
+    "status": 200,
+    "location": null,
+    "bytes": 170
+  },
+  {
+    "path": "/client",
+    "status": 307,
+    "location": "/client/login",
+    "bytes": 16919
+  },
+  {
+    "path": "/team",
+    "status": 307,
+    "location": "/client/login",
+    "bytes": 16735
+  },
+  {
+    "path": "/api/inquiry",
+    "status": 403,
+    "location": null,
+    "bytes": 22
+  },
+  {
+    "path": "/api/rentals/request",
+    "status": 403,
+    "location": null,
+    "bytes": 14
+  },
+  {
+    "path": "/api/client/login",
+    "status": 403,
+    "location": null,
+    "bytes": 9
+  },
+  {
+    "path": "/api/admin/login",
+    "status": 403,
+    "location": null,
+    "bytes": 14
+  },
+  {
+    "path": "/api/team/equipment/photo",
+    "status": 403,
+    "location": null,
+    "bytes": 9
+  },
+  {
+    "path": "/api/inquiry",
+    "status": 303,
+    "location": "http://127.0.0.1:3231/book?lang=en&error=validation",
+    "bytes": 0
+  }
+]

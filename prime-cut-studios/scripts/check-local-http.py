@@ -20,7 +20,7 @@ try:
   result=request(path);assert result['status']==307 and result['location']=='/client/login',result;results.append(result);print('PASS:',result,flush=True)
  for path in ['/api/inquiry','/api/rentals/request','/api/client/login','/api/admin/login','/api/team/equipment/photo']:
   result=request(path,b'name=Test',{'Content-Type':'application/x-www-form-urlencoded','Origin':'https://foreign.example','Sec-Fetch-Site':'cross-site'});assert result['status']==403,result;results.append(result);print('PASS: cross-origin',result,flush=True)
- result=request('/api/inquiry',b'name=x',{'Content-Type':'application/x-www-form-urlencoded','Origin':base,'Sec-Fetch-Site':'same-origin'});assert result['status']==303 and result['location']==base+'/book?error=validation',result;results.append(result);print('PASS: validation redirects stay on local origin',result,flush=True)
+ result=request('/api/inquiry',b'name=x',{'Content-Type':'application/x-www-form-urlencoded','Origin':base,'Sec-Fetch-Site':'same-origin'});assert result['status']==303 and result['location']==base+'/book?lang=en&error=validation',result;results.append(result);print('PASS: validation redirects stay on local origin',result,flush=True)
  pathlib.Path('docs/audit-http-results.json').write_text(json.dumps(results,indent=2))
  print(str(len(results))+' real local HTTP checks passed; no provider keys or client writes.')
 finally:
