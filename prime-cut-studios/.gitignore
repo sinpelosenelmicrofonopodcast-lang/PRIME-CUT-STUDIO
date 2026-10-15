@@ -15,3 +15,6 @@ data/
 
 # Client assets must remain in authenticated deployment/storage only.
 private/
+
+# Supabase CLI cache
+supabase/.temp/

@@ -10,6 +10,8 @@ async function createBackend(secret){
  await db.exec("CREATE SCHEMA IF NOT EXISTS private; CREATE FUNCTION private.is_staff() RETURNS boolean LANGUAGE sql AS 'select false'; CREATE TABLE catalog_items(id uuid PRIMARY KEY,kind text,name text,description text,active boolean DEFAULT true,base_price_cents integer,metadata jsonb DEFAULT '{}'); ALTER TABLE catalog_items ENABLE ROW LEVEL SECURITY; CREATE POLICY \"catalog public read\" ON catalog_items FOR SELECT TO anon, authenticated USING (active = true OR private.is_staff());");
  await db.exec(fs.readFileSync('supabase/migrations/20261014234000_pricing_inquiry_snapshots.sql','utf8'));
  await db.exec(fs.readFileSync('supabase/migrations/20261014235100_atomic_production_pricing.sql','utf8'));
+ await db.exec(fs.readFileSync('supabase/migrations/20261015000412_project_finance_workflow.sql','utf8'));
+ await db.exec(fs.readFileSync('supabase/migrations/20261015001336_finance_reservation_guard.sql','utf8'));
  const files=new Map(),errors=[];
  const server=http.createServer(async(req,res)=>{try{
   const u=new URL(req.url,'http://localhost');let raw=Buffer.alloc(0);for await(const part of req){raw=Buffer.concat([raw,part]);if(raw.length>5*1024*1024)throw Error('Too large');}

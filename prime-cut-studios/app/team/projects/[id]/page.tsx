@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import {ProjectFinance} from '@/components/workspace/ProjectFinance';
 import {projectTalent} from '@/lib/workspace-db';
 import {TalentCards} from '@/components/workspace/TalentCards';
 import {clientProjectData} from '@/lib/client-project-data';
@@ -28,7 +29,8 @@ export default async function Project({params,searchParams}:{params:Promise<{id:
  if(tab==='client'){const data=await clientProjectData(p);return <><div className="shell" style={{paddingTop:16,paddingBottom:16}}><Link className="inline-link" href={'/team/projects/'+id}>← Volver a gestión del proyecto</Link></div><ClientProjectDashboard data={data} section={section} preview/></>;}
  const talents=await projectTalent(id);
  const bookEnabled=projectBookEnabled();
- const tabs=[{id:'overview',label:'Progreso y conversación',description:'Etapas, fechas y próximos pasos de la producción.'},...(bookEnabled?[{id:'production',label:'Ficha de producción',description:'Locaciones, elenco, libreto, referencias y documentos.'}]:[]),...(canEdit?[{id:'settings',label:'Datos y accesos',description:'Información general, cliente y colaboradores del proyecto.'}]:[])];
+ const financeRead=bookEnabled&&!!await requireCapability('finance.read',id);
+ const tabs=[{id:'overview',label:'Progreso y conversación',description:'Etapas, fechas y próximos pasos de la producción.'},...(bookEnabled?[{id:'production',label:'Ficha de producción',description:'Locaciones, elenco, libreto, referencias y documentos.'}]:[]),...(financeRead?[{id:'finance',label:'Contrato y pagos',description:'Acuerdo, factura, depósito y confirmación de reserva.'}]:[]),...(canEdit?[{id:'settings',label:'Datos y accesos',description:'Información general, cliente y colaboradores del proyecto.'}]:[])];
  const current=tabs.find(t=>t.id===tab)||tabs[0];
  return <main className="shell project-dashboard">
   <Link href="/team" className="inline-link">← Team workspace</Link>
@@ -39,6 +41,7 @@ export default async function Project({params,searchParams}:{params:Promise<{id:
   <div className="project-section-heading"><h2>{current.label}</h2><p className="muted">{current.description}</p></div>
   {current.id==='overview'&&<ProjectWorkspace projectId={id} staff canEdit={canEdit}/>}
   {current.id==='production'&&<><section className="panel"><h2>Elenco asignado al proyecto</h2><p className="muted">Estos perfiles autorizados también aparecen en la sección Elenco del cliente.</p><TalentCards project={id} talents={talents.map(({photo_paths,...t})=>({...t,photo_count:photo_paths.length}))}/>{!talents.length&&<p>Todavía no hay talentos asignados.</p>}<Link href="/team/talent" className="btn secondary btn-small">Asignar talentos del banco →</Link></section><ProductionBook projectId={id} staff canEdit={canEdit}/></>}
+  {current.id==='finance'&&financeRead&&<ProjectFinance projectId={id} eventDate={p.event_date}/>}
   {current.id==='settings'&&canEdit&&<div className="project-settings">{bookEnabled&&<ProjectDetails project={p}/>}<div className="project-access-grid">{bookEnabled&&<ProjectClient id={id} name={p.client_name} email={p.client_email} canReassign={!!editor&&['owner','administrator'].includes(editor.role)}/>}<ProjectMembers id={id} primaryEmail={p.client_email}/></div></div>}
  </main>;
 }

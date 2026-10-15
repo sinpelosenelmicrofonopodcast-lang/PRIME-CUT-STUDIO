@@ -1,0 +1,12 @@
+import 'server-only';
+import {comm,filters,rpc} from '@/lib/communications-db';
+export type ProjectFinance={project_id:string;revision:number;proposal_id:string;proposal_revision:number;contract_id:string;invoice_id:string;invoice_number:string;total_cents:number;deposit_cents:number;signed_contract_id:string|null;contract_verified_at:string|null;confirmed_at:string|null;updated_at:string};
+export type Receipt={id:string;amount_cents:number;reference:string;received_date:string;created_at:string};
+export type ClientFinance=Pick<ProjectFinance,'invoice_number'|'total_cents'|'deposit_cents'|'contract_verified_at'|'confirmed_at'|'contract_id'|'invoice_id'|'signed_contract_id'>&{paid_cents:number};
+export async function projectFinance(id:string){return (await comm<ProjectFinance[]>(filters('pc_project_finance',{project_id:'eq.'+id,select:'*'})))[0]||null;}
+export async function projectReceipts(id:string){return comm<Receipt[]>(filters('pc_project_receipts',{project_id:'eq.'+id,select:'id,amount_cents,reference,received_date,created_at',order:'created_at.asc'}));}
+export async function clientFinance(id:string,visibleDocuments:string[]):Promise<ClientFinance|null>{const f=await projectFinance(id);if(!f||![f.contract_id,f.invoice_id,...(f.signed_contract_id?[f.signed_contract_id]:[])].every(x=>visibleDocuments.includes(x)))return null;const receipts=await projectReceipts(id);return {invoice_number:f.invoice_number,total_cents:Number(f.total_cents),deposit_cents:Number(f.deposit_cents),contract_verified_at:f.contract_verified_at,confirmed_at:f.confirmed_at,contract_id:f.contract_id,invoice_id:f.invoice_id,signed_contract_id:f.signed_contract_id,paid_cents:receipts.reduce((sum,r)=>sum+Number(r.amount_cents),0)};}
+export function manageFinance(project:string,expected:number,action:string,input:object,actor:string|null){return rpc<string>('pc_manage_project_finance',{p_project:project,p_expected:expected,p_action:action,p_input:input,p_actor:actor});}
+export function usd(cents:number){return new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(cents/100);}
+/** Exact USD decimal parsing. Exponents, rounding and excessive cents are rejected. */
+export function moneyCents(raw:string){if(!/^\d{1,7}(\.\d{1,2})?$/.test(raw))return null;const [d,c='']=raw.split('.'),n=Number(d)*100+Number(c.padEnd(2,'0'));return Number.isSafeInteger(n)&&n<=100000000?n:null;}

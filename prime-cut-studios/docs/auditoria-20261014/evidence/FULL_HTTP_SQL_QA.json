@@ -1,5 +1,5 @@
 {
-  "scope": "Next.js route HTTP -> local adapter -> real isolated PostgreSQL. Legacy fixture sessions. Storage is isolated bytes. No SMTP/Auth provider certification or browser visual certification.",
+  "scope": "Next.js HTTP -> isolated adapter -> real PostgreSQL. Browser owner project/finance and authorized viewer at 1440/390px; browser payment save verified in SQL. Fixture sessions and private storage bytes. No SMTP/Auth provider certification.",
   "results": [
     {
       "name": "owner and three existing fixture clients establish HTTP sessions",
@@ -51,6 +51,50 @@
     },
     {
       "name": "file signature mismatch rejected without storage orphan",
+      "pass": true
+    },
+    {
+      "name": "invoice PDF remains project scoped and finance input rejects forged amounts and clients",
+      "pass": true
+    },
+    {
+      "name": "contract cannot issue against approval of an obsolete proposal revision",
+      "pass": true
+    },
+    {
+      "name": "notification failure rolls back contract, invoice and project status together",
+      "pass": true
+    },
+    {
+      "name": "approved proposal issues one invoice, scope snapshot and operational notification atomically",
+      "pass": true
+    },
+    {
+      "name": "assigned finance and producer roles cannot perform each other privileged actions; direct table/RPC access is private",
+      "pass": true
+    },
+    {
+      "name": "client finance summary displays agreed amounts without private payment references",
+      "pass": true
+    },
+    {
+      "name": "general project settings and direct SQL cannot bypass contract/deposit reservation",
+      "pass": true
+    },
+    {
+      "name": "reservation cannot be confirmed before signed contract and deposit",
+      "pass": true
+    },
+    {
+      "name": "payment receipt is exact, immutable and retry safe without duplicate notifications",
+      "pass": true
+    },
+    {
+      "name": "overpayment, duplicate bank reference and future receipt date preserve financial totals",
+      "pass": true
+    },
+    {
+      "name": "signed contract and covered deposit still require a date and explicit staff availability confirmation",
       "pass": true
     },
     {
@@ -155,6 +199,10 @@
     },
     {
       "name": "browser owner private project layout renders and fits desktop/mobile with isolated session",
+      "pass": true
+    },
+    {
+      "name": "browser owner finance private project layout renders and fits desktop/mobile with isolated session",
       "pass": true
     },
     {
