@@ -31,7 +31,7 @@ export default async function Project({params,searchParams}:{params:Promise<{id:
  const talents=await projectTalent(id);
  const bookEnabled=projectBookEnabled();
  const financeRead=bookEnabled&&!!await requireCapability('finance.read',id);
- const canReadTasks=!!await requireCapability('tasks.read',id),canWriteTasks=canEdit&&!!await requireCapability('tasks.write',id);
+
  const tabs=[{id:'overview',label:'Avance rápido',description:'Marca tareas, cambia fechas y confirma avances en un solo lugar.'},{id:'details',label:'Vista avanzada',description:'Cronología completa, historial, conversación y todos los detalles.'},...(bookEnabled?[{id:'production',label:'Ficha de producción',description:'Locaciones, elenco, libreto, referencias y documentos.'}]:[]),...(financeRead?[{id:'finance',label:'Contrato y pagos',description:'Acuerdo, factura, depósito y confirmación de reserva.'}]:[]),...(canEdit?[{id:'settings',label:'Datos y accesos',description:'Información general, cliente y colaboradores del proyecto.'}]:[])];
  const current=tabs.find(t=>t.id===tab)||tabs[0];
  return <main className="shell project-dashboard">
@@ -41,7 +41,7 @@ export default async function Project({params,searchParams}:{params:Promise<{id:
   {saved&&<p role="status" className="note">Cambios guardados en el proyecto.</p>}
   <nav className="project-navigation" aria-label="Secciones del proyecto">{tabs.map(t=><Link key={t.id} href={'/team/projects/'+id+'?tab='+t.id} aria-current={current.id===t.id?'page':undefined} scroll={false}>{t.label}</Link>)}</nav>
   <div className="project-section-heading"><h2>{current.label}</h2><p className="muted">{current.description}</p></div>
-  {current.id==='overview'&&<ProjectQuickProgress projectId={id} canEdit={canEdit} canReadTasks={canReadTasks} canWriteTasks={canWriteTasks}/>}
+  {current.id==='overview'&&<ProjectQuickProgress projectId={id}/>}
   {current.id==='details'&&<ProjectWorkspace projectId={id} staff canEdit={canEdit}/>}
   {current.id==='production'&&<><section className="panel"><h2>Elenco asignado al proyecto</h2><p className="muted">Estos perfiles autorizados también aparecen en la sección Elenco del cliente.</p><TalentCards project={id} talents={talents.map(({photo_paths,...t})=>({...t,photo_count:photo_paths.length}))}/>{!talents.length&&<p>Todavía no hay talentos asignados.</p>}<Link href="/team/talent" className="btn secondary btn-small">Asignar talentos del banco →</Link></section><ProductionBook projectId={id} staff canEdit={canEdit}/></>}
   {current.id==='finance'&&financeRead&&<ProjectFinance projectId={id} eventDate={p.event_date}/>}
