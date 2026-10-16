@@ -1,14 +1,15 @@
 import Link from 'next/link';
 import {projectStages} from '@/lib/workspace-db';
-import {getTasks} from '@/lib/operations-db';
+import {getTasks,requireCapability} from '@/lib/operations-db';
 import {progress,stageLabels} from '@/lib/workspace-policy';
 import {WorkspaceForm} from './WorkspaceForm';
 import styles from './project-quick.module.css';
 
 const sensitive=/(?:contract|reservation|deposit|approval|client review|final delivery|contrato|firma|dep[oó]sito|factura|entrega final|aprobaci[oó]n)/i;
-export async function ProjectQuickProgress({projectId,canEdit,canReadTasks,canWriteTasks}:{
- projectId:string;canEdit:boolean;canReadTasks:boolean;canWriteTasks:boolean;
-}){
+export async function ProjectQuickProgress({projectId}:{projectId:string}){
+ const canEdit=!!await requireCapability('projects.write',projectId);
+ const canReadTasks=!!await requireCapability('tasks.read',projectId);
+ const canWriteTasks=canEdit&&!!await requireCapability('tasks.write',projectId);
  const [stages,tasks]=await Promise.all([projectStages(projectId),canReadTasks?getTasks([projectId],false):Promise.resolve([])]);
  const included=stages.filter(s=>s.status!=='not_applicable');
  const completed=included.filter(s=>s.status==='completed').length;
