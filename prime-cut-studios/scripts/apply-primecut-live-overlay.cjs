@@ -1,7 +1,7 @@
 /* Validated, narrow UX patch over the exact Vercel deployment source. */
 const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto');
 const root=process.cwd();
-const base='https://raw.githubusercontent.com/sinpelosenelmicrofonopodcast-lang/PRIME-CUT-STUDIO/1cd9cbe79c268f0113139065cde3d0675019a724/prime-cut-studios/';
+const base='https://raw.githubusercontent.com/sinpelosenelmicrofonopodcast-lang/PRIME-CUT-STUDIO/e27a68cbfec7f378b4a9f454f49b8cc4be0f9c15/prime-cut-studios/';
 async function download(relative){const r=await fetch(base+relative,{signal:AbortSignal.timeout(25000)});if(!r.ok)throw Error('Patch unavailable '+relative+' HTTP '+r.status);return await r.text()}
 function target(p){const x=path.resolve(root,p);if(!x.startsWith(root+path.sep))throw Error('Unsafe file');return x}
 function source(p){return fs.readFileSync(target(p),'utf8')}
@@ -19,9 +19,8 @@ async function main(){
  ]){verify(p,sha);updates.set(p,await download(p))}
  let project=source('app/team/projects/[id]/page.tsx');
  project=replace(project,"import {ProjectWorkspace} from '@/components/workspace/ProjectWorkspace';","import {ProjectWorkspace} from '@/components/workspace/ProjectWorkspace';\nimport {ProjectQuickProgress} from '@/components/workspace/ProjectQuickProgress';",'import');
- project=regex(project,/(\bconst\s+financeRead\s*=\s*[^;]+;)/,"$1\n const canReadTasks=!!await requireCapability('tasks.read',id),canWriteTasks=canEdit&&!!await requireCapability('tasks.write',id);",'access');
  project=regex(project,/\{id:'overview',label:'[^']*',description:'[^']*'\}/,"{id:'overview',label:'Avance rápido',description:'Tareas, progreso y fechas.'},{id:'details',label:'Vista avanzada',description:'Cronología, mensajes e historial.'}",'tabs');
- project=regex(project,/\{current\.id==='overview'&&<ProjectWorkspace\b[^>]*\/>\}/,"{current.id==='overview'&&<ProjectQuickProgress projectId={id} canEdit={canEdit} canReadTasks={canReadTasks} canWriteTasks={canWriteTasks}/>}\n{current.id==='details'&&<ProjectWorkspace projectId={id} staff canEdit={canEdit}/>}",'overview');
+ project=regex(project,/\{current\.id==='overview'&&<ProjectWorkspace\b[^>]*\/>\}/,"{current.id==='overview'&&<ProjectQuickProgress projectId={id}/>}\n{current.id==='details'&&<ProjectWorkspace projectId={id} staff canEdit={canEdit}/>}",'overview');
  updates.set('app/team/projects/[id]/page.tsx',project);
  let team=source('app/team/page.tsx');
  if(team.includes('<nav className="operations-nav">')){
