@@ -23,14 +23,14 @@ export async function POST(req:Request){
  let nextStatus=stage.status,nextConfirmed=stage.dates_confirmed,reason='';
  if(action==='quick'){
   const requested=f.get('status')||'';
-  if(sensitive.test(stage.title)||!['pending','in_progress','completed'].includes(stage.status)||!['pending','completed'].includes(requested))
+  if([3,4,10,12,13,14].includes(stage.position)||sensitive.test(stage.title)||!['pending','in_progress','completed'].includes(stage.status)||!['pending','completed'].includes(requested))
    return new Response('This stage requires detailed verification',{status:400});
   if((requested==='completed'&&stage.status==='completed')||(requested==='pending'&&stage.status!=='completed'))
    return new Response('Invalid transition',{status:409});
   nextStatus=requested as typeof stage.status;
   reason=requested==='completed'?'Etapa marcada completada por el equipo':'Etapa reabierta por el equipo';
  }else{
-  if(f.get('verified')!=='yes'||!(stage.planned_start||stage.planned_end)||stage.dates_confirmed||sensitive.test(stage.title))
+  if(f.get('verified')!=='yes'||!(stage.planned_start||stage.planned_end)||stage.dates_confirmed||[3,4,10,12,13,14].includes(stage.position)||sensitive.test(stage.title))
    return new Response('Verify the dates and any required agreements first',{status:400});
   nextConfirmed=true;reason='Fechas verificadas y confirmadas manualmente por el equipo';
  }
