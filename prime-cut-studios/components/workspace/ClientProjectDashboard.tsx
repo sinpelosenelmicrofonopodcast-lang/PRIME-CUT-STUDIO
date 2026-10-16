@@ -50,7 +50,15 @@ export function ClientProjectDashboard({data,section,canReview=false,preview=fal
   <div className={styles.brandbar}><Link href={preview?'/team/projects/'+p.id:'/client'}>PRIME CUT <span>STUDIOS</span></Link><span>Tu producción</span></div>
   {preview&&<div className={styles.preview}>Vista del cliente · Solo información compartida · Las acciones están desactivadas</div>}
   <header className={styles.header}><div><p className={styles.eyebrow}>{brief?.metadata.subtitle||'Proyecto privado'}</p><h1>{title}</h1><p>Todo lo que necesitas saber de tu producción, en un solo lugar.</p></div><span className={styles.status}>{statusLabels[p.status]||'En producción'}</span></header>
-  <nav className={styles.nav} aria-label="Tu proyecto">{clientProjectSections.map(([key,label])=><Link key={key} href={href(key)} scroll={false} aria-current={current===key?'page':undefined}>{label}</Link>)}</nav>
+  <nav className={styles.nav} aria-label="Tu proyecto">
+   {clientProjectSections.filter(([key])=>['home','proposal','files','conversation'].includes(key)).map(([key,label])=><Link key={key} href={href(key)} scroll={false} aria-current={current===key?'page':undefined}>{key==='home'?'Mi proyecto':key==='files'?'Entregas':key==='conversation'?'Mensajes':label}</Link>)}
+   <details style={{alignSelf:'center',position:'relative',marginLeft:'auto'}}>
+    <summary style={{padding:'12px',cursor:'pointer',color:'#d6b477',fontSize:13}}>Más información</summary>
+    <div style={{display:'flex',flexWrap:'wrap',maxWidth:450,background:'#191a17',border:'1px solid #353126',borderRadius:10,padding:5}}>
+     {clientProjectSections.filter(([key])=>!['home','proposal','files','conversation'].includes(key)).map(([key,label])=><Link key={key} href={href(key)} scroll={false} aria-current={current===key?'page':undefined}>{label}</Link>)}
+    </div>
+   </details>
+  </nav>
   <main className={styles.content}>
   {current==='home'&&<>
    <div className={styles.overviewGrid}><section className={styles.heroCard}><p className={styles.eyebrow}>Dónde vamos</p><h2>{statusLabels[p.status]||'En producción'}</h2><p>{brief?.body.split('\n\n')[0]||'El equipo está preparando la propuesta de tu proyecto.'}</p><div className={styles.progressLabel}><span>Etapas completadas</span><strong>{progress(stages)}%</strong></div><progress value={progress(stages)} max={100} aria-label="Etapas completadas"/><Link className={styles.textLink} href={href('proposal')}>Revisar propuesta →</Link></section>
