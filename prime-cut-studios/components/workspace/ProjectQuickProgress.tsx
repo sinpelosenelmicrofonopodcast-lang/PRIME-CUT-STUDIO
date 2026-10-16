@@ -15,7 +15,7 @@ export async function ProjectQuickProgress({projectId,canEdit,canReadTasks,canWr
  const pct=progress(stages);
  const next=included.find(s=>s.status==='waiting_client'||s.status==='blocked')||included.find(s=>s.status==='in_progress')||included.find(s=>s.status==='pending');
  const pendingTasks=tasks.filter(t=>t.status!=='done');
- const countDate=stages.filter(s=>s.planned_start&&!s.dates_confirmed).length;
+ const countDate=stages.filter(s=>(s.planned_start||s.planned_end)&&!s.dates_confirmed).length;
  return <div className={styles.root}>
   <section className={styles.hero} aria-label="Resumen del proyecto">
    <div><span className={styles.kicker}>CENTRO DE PRODUCCIÓN</span><h2>{next?'Próximo: '+next.title:'Etapas al día'}</h2><p>{next?.next_step||next?.description||'No hay acciones urgentes registradas.'}</p></div>
@@ -28,7 +28,7 @@ export async function ProjectQuickProgress({projectId,canEdit,canReadTasks,canWr
    {!stages.length&&<p>Este proyecto todavía no tiene etapas. Ábrelas en las opciones avanzadas.</p>}
    <div className={styles.stageList}>{stages.map(s=>{
     const done=s.status==='completed';
-    const canToggle=canEdit&&!sensitive.test(s.title)&&(done||s.status==='pending'||s.status==='in_progress');
+    const canToggle=canEdit&&![3,4,10,12,13,14].includes(s.position)&&!sensitive.test(s.title)&&(done||s.status==='pending'||s.status==='in_progress');
     return <article className={styles.stage} key={s.id}>
      <div className={styles.stageHead}>
       {canToggle?<WorkspaceForm action="/api/team/timeline" method="post" className={styles.quickForm}>
