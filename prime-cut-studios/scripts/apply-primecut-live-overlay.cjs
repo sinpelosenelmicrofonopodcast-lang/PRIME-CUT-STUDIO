@@ -37,6 +37,15 @@ async function main(){
  if(start<0||end<0||end-start>2800||nextStart<0||nextEnd<0)throw Error('Client nav mismatch');
  client=client.slice(0,start)+updated.slice(nextStart,nextEnd+6)+client.slice(end+6);
  updates.set('components/workspace/ClientProjectDashboard.tsx',client);
+
+ // Keep the production-only gallery manager route even if the original deployment
+ // excluded its source from the redeploy file set. Preserve existing byte-for-byte.
+ for(const p of ['app/admin/galleries/page.tsx','app/api/admin/galleries/route.ts']){
+  const exists=fs.existsSync(target(p));
+  const content=exists?source(p):await download(p);
+  updates.set(p,content);
+  console.log('PRIMECUTS_GALLERY_SOURCE',p,exists?'preserved':'restored');
+ }
  for(const [p,s] of updates)write(p,s);
  console.log('PRIMECUTS_SAFE_PATCH_OK '+updates.size+' files, original modules preserved');
 }
